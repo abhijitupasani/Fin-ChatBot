@@ -1,0 +1,14 @@
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Django migrations
+# */migrations/
+
+# # Environment variables and configs
+# .env
+# *.env
+
+# Virtual environment
+venv/
+env/
