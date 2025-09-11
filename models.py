@@ -1,8 +1,19 @@
-from pydantic import BaseModel
+from sqlalchemy import Column, Integer, Text, TIMESTAMP, func
+from sqlalchemy.ext.declarative import declarative_base
 
-class ChatRequest(BaseModel): #JSON payload the client sends, containing a user message
-    message: str
+Base = declarative_base()
 
-class ChatResponse(BaseModel): #AI chatbot’s text reply returned from the API
-    reply: str
+class Document(Base):
+    __tablename__ = "documents"
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(Text, nullable=True)
+    content = Column(Text, nullable=True)
+    uploaded_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
 
+class Conversation(Base):
+    __tablename__ = "conversations"
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Text, nullable=True)  # optional for multi-user later
+    question = Column(Text, nullable=False)
+    answer = Column(Text, nullable=False)
+    created_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
