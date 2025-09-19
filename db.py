@@ -1,26 +1,22 @@
 import os
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, declarative_base
 from dotenv import load_dotenv
-from models import Base
 
 load_dotenv()
 
-DATABASE_URL = os.environ.get("DATABASE_URL")
-if not DATABASE_URL:
-    raise RuntimeError("Set DATABASE_URL in environment or .env")
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+engine = create_engine(DATABASE_URL, echo=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
 
-def init_db():
-    # create tables
-    Base.metadata.create_all(bind=engine)
-
-# Dependency for FastAPI endpoints
 def get_db():
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
+
+def init_db():
+    Base.metadata.create_all(bind=engine)
