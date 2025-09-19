@@ -5,9 +5,9 @@ __pycache__/
 # Django migrations
 # */migrations/
 
-# # Environment variables and configs
-# .env
-# *.env
+# Environment variables and configs
+.env
+*.env
 
 # Virtual environment
 .venv/
