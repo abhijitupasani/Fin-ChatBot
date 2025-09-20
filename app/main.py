@@ -1,27 +1,16 @@
-# main.py
-import os
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .models import ChatRequest, ChatResponse
-from openai import OpenAI
-from dotenv import load_dotenv
-
-load_dotenv()
 
 app = FastAPI()
 
-# Enable CORS for frontend
+# CORS for React dev server
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # or ["http://localhost:3000"]
+    allow_origins=["http://localhost:5173"],  # your React dev URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
-)
-
-client = OpenAI(
-    base_url="https://openrouter.ai/api/v1",
-    api_key=os.getenv("OPENROUTER_API_KEY")
 )
 
 @app.get("/health")
@@ -30,18 +19,10 @@ async def health_check():
 
 @app.post("/chat", response_model=ChatResponse)
 async def chat_endpoint(chat_request: ChatRequest):
+    user_id = chat_request.user_id
     user_message = chat_request.message
-
-    try:
-        response = client.chat.completions.create(
-            model="openai/gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": "You are a helpful financial assistant."},
-                {"role": "user", "content": user_message},
-            ]
-        )
-        reply = response.choices[0].message.content.strip()
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"OpenRouter API error: {str(e)}")
-
+    
+    # Replace this with OpenAI/OpenRouter logic
+    reply = f"Received from user {user_id}: {user_message}"
+    
     return ChatResponse(reply=reply)

@@ -1,64 +1,41 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-const backendUrl = "https://fin-chatbot.onrender.com"; // replace with your Render URL
-
-const Chat = () => {
-  const [messages, setMessages] = useState([]);
+export default function Chat() {
   const [input, setInput] = useState("");
+  const [messages, setMessages] = useState([]);
+
+  const backendUrl = "https://fin-chatbot.onrender.com"; // your deployed backend
 
   const sendMessage = async () => {
-    if (!input.trim()) return;
-
-    setMessages(prev => [...prev, { sender: "user", text: input }]);
+    const payload = { user_id: "u1", message: input };
 
     try {
-      console.log("Sending:", { message: input });
-
       const res = await fetch(`${backendUrl}/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: input })
+        body: JSON.stringify(payload)
       });
-
-      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-
+      
       const data = await res.json();
-      const botReply = data.reply || "No response";
-
-      setMessages(prev => [...prev, { sender: "bot", text: botReply }]);
+      setMessages([...messages, { user: input, bot: data.reply }]);
+      setInput("");
     } catch (err) {
       console.error("Error sending message:", err);
-      setMessages(prev => [...prev, { sender: "bot", text: "Error connecting to backend." }]);
     }
-
-    setInput("");
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") sendMessage();
   };
 
   return (
-    <div style={{ maxWidth: 600, margin: "0 auto", padding: 20 }}>
-      <h2>Financial Chatbot</h2>
-      <div style={{ border: "1px solid #ccc", padding: 10, minHeight: 300, overflowY: "auto" }}>
-        {messages.map((msg, idx) => (
-          <div key={idx} style={{ textAlign: msg.sender === "user" ? "right" : "left" }}>
-            <strong>{msg.sender === "user" ? "You" : "Bot"}:</strong> {msg.text}
+    <div>
+      <div>
+        {messages.map((m, i) => (
+          <div key={i}>
+            <b>You:</b> {m.user} <br />
+            <b>Bot:</b> {m.bot}
           </div>
         ))}
       </div>
-      <input
-        type="text"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        onKeyPress={handleKeyPress}
-        placeholder="Type your message..."
-        style={{ width: "80%", padding: 10, marginTop: 10 }}
-      />
-      <button onClick={sendMessage} style={{ padding: 10, marginLeft: 10 }}>Send</button>
+      <input value={input} onChange={(e) => setInput(e.target.value)} />
+      <button onClick={sendMessage}>Send</button>
     </div>
   );
-};
-
-export default Chat;
+}
