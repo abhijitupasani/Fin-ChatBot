@@ -2,7 +2,7 @@
 import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from models import ChatRequest, ChatResponse
+from .models import ChatRequest, ChatResponse
 from openai import OpenAI
 from dotenv import load_dotenv
 
