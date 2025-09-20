@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const backendUrl = "https://your-backend.onrender.com"; // replace with your Render URL
+const backendUrl = "https://fin-chatbot.onrender.com"; // replace with your Render URL
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
