@@ -1,26 +1,27 @@
+# main.py
 import os
 from fastapi import FastAPI, HTTPException
-from .models import ChatRequest, ChatResponse
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
+from models import ChatRequest, ChatResponse
 from openai import OpenAI
+from dotenv import load_dotenv
 
 load_dotenv()
 
 app = FastAPI()
 
-client = OpenAI(
-    api_key=os.getenv("OPENROUTER_API_KEY"),
-    base_url="https://openrouter.ai/api/v1"
-)
-
-
+# Enable CORS for frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # For testing only; later restrict to your frontend URL
+    allow_origins=["*"],  # or ["http://localhost:3000"]
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+)
+
+client = OpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key=os.getenv("OPENROUTER_API_KEY")
 )
 
 @app.get("/health")
@@ -37,11 +38,9 @@ async def chat_endpoint(chat_request: ChatRequest):
             messages=[
                 {"role": "system", "content": "You are a helpful financial assistant."},
                 {"role": "user", "content": user_message},
-            ],
-            max_tokens=200  # optional: control cost/response length
+            ]
         )
-        # Access reply safely
-        reply = response.choices[0].message.content.strip() if response.choices else "No response from model."
+        reply = response.choices[0].message.content.strip()
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"OpenRouter API error: {str(e)}")
 
