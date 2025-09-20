@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from models import ChatRequest, ChatResponse
+from .models import ChatRequest, ChatResponse
 from openai import OpenAI
 import os
 
