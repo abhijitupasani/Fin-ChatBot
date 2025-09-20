@@ -1,0 +1,27 @@
+trigger:
+  - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  APP_NAME: 'finchatbot'
+  RESOURCE_GROUP: 'finchatbot-rg'
+  IMAGE_NAME: 'finchatbot:latest'
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.11'
+
+- script: |
+    python -m venv .venv
+    source .venv/bin/activate
+    pip install --upgrade pip
+    pip install -r requirements.txt
+  displayName: 'Install dependencies'
+
+- script: |
+    az login --service-principal -u $(AZURE_CLIENT_ID) -p $(AZURE_CLIENT_SECRET) --tenant $(AZURE_TENANT_ID)
+    az webapp up --name $(APP_NAME) --resource-group $(RESOURCE_GROUP) --sku F1
+  displayName: 'Deploy to Azure App Service'
