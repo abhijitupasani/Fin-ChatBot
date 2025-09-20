@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const backendUrl = "https://fin-chatbot.onrender.com"; // <-- replace with your Render URL
+const backendUrl = "https://your-backend.onrender.com"; // replace with your Render URL
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
@@ -9,21 +9,18 @@ const Chat = () => {
   const sendMessage = async () => {
     if (!input.trim()) return;
 
-    // Add user message to chat
     setMessages(prev => [...prev, { sender: "user", text: input }]);
 
     try {
+      console.log("Sending:", { message: input });
+
       const res = await fetch(`${backendUrl}/chat`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ message: input }) // Must match ChatRequest model
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: input })
       });
 
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
       const data = await res.json();
       const botReply = data.reply || "No response";
@@ -34,19 +31,17 @@ const Chat = () => {
       setMessages(prev => [...prev, { sender: "bot", text: "Error connecting to backend." }]);
     }
 
-    setInput(""); // Clear input field
+    setInput("");
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      sendMessage();
-    }
+    if (e.key === "Enter") sendMessage();
   };
 
   return (
     <div style={{ maxWidth: 600, margin: "0 auto", padding: 20 }}>
       <h2>Financial Chatbot</h2>
-      <div style={{ border: "1px solid #ccc", padding: 10, minHeight: 300 }}>
+      <div style={{ border: "1px solid #ccc", padding: 10, minHeight: 300, overflowY: "auto" }}>
         {messages.map((msg, idx) => (
           <div key={idx} style={{ textAlign: msg.sender === "user" ? "right" : "left" }}>
             <strong>{msg.sender === "user" ? "You" : "Bot"}:</strong> {msg.text}
