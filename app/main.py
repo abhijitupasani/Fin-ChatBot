@@ -9,7 +9,6 @@ from fastapi.responses import RedirectResponse
 
 app = FastAPI()
 
-app.mount("/assets", StaticFiles(directory="app/frontend/assets"), name="assets")
 
 @app.get("/")
 def root():
