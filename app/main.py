@@ -15,9 +15,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# OpenRouter/OpenAI client
-client = OpenAI(api_key=os.getenv("OPENROUTER_API_KEY"))
-
+client = OpenAI(
+    api_key=os.getenv("OPENROUTER_API_KEY"),
+    base_url="https://openrouter.ai/api/v1"   # 👈 IMPORTANT
+)
 @app.get("/health")
 async def health_check():
     return {"status": "ok"}
