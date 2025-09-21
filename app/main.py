@@ -1,32 +1,15 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 from models import ChatRequest, ChatResponse
 from openai import OpenAI
 import os
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
-from fastapi.responses import RedirectResponse
 
 app = FastAPI()
 
-
-@app.get("/")
-def root():
-    return RedirectResponse(url="/chat")
-
-# CORS for React dev server
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # your React dev URL
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 client = OpenAI(
     api_key=os.getenv("OPENROUTER_API_KEY"),
-    base_url="https://openrouter.ai/api/v1"   # 👈 IMPORTANT
+    base_url="https://openrouter.ai/api/v1"
 )
+
 @app.get("/health")
 async def health_check():
     return {"status": "ok"}
