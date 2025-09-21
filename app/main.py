@@ -3,8 +3,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from models import ChatRequest, ChatResponse
 from openai import OpenAI
 import os
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+from fastapi.responses import RedirectResponse
 
 app = FastAPI()
+
+app.mount("/assets", StaticFiles(directory="app/frontend/assets"), name="assets")
+
+@app.get("/")
+def root():
+    return RedirectResponse(url="/chat")
 
 # CORS for React dev server
 app.add_middleware(
