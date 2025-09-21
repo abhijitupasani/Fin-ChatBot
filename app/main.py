@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from models import ChatRequest, ChatResponse
+from .models import ChatRequest, ChatResponse
 from openai import OpenAI
 import os
 
