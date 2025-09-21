@@ -3,6 +3,7 @@ from models import ChatRequest, ChatResponse
 from openai import OpenAI
 import os
 
+
 app = FastAPI()
 
 client = OpenAI(
