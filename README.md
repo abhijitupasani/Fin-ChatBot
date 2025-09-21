@@ -20,7 +20,7 @@ Fin-ChatBot/
 * FastAPI Backend: Lightweight and fast API server.
 * Health Check Endpoint: /health to verify server status.
 * Chat Endpoint: /chat for sending user messages and receiving AI responses.
-* Deployed on Render: Accessible online without local setup.
+* Deployed on Render: [(https://fin-chatbot.onrender.com)](https://fin-chatbot.onrender.com) – accessible online without local setup.
 * Extensible: Modular design for features like context memory, multi-user support, and analytics.
 
 ## Getting Started
@@ -71,6 +71,7 @@ uvicorn app.main:app --reload
 * Server runs at [http://127.0.0.1:8000](http://127.0.0.1:8000)
 * Health Check: [http://127.0.0.1:8000/health](http://127.0.0.1:8000/health)
 * Chat Endpoint: [http://127.0.0.1:8000/chat](http://127.0.0.1:8000/chat)
+* Deployed Render URL: [https://fin-chatbot.onrender.com](https://fin-chatbot.onrender.com)
 
 ## API Documentation
 
@@ -79,7 +80,7 @@ uvicorn app.main:app --reload
 
 ## Example Request
 
-POST /chat with JSON body:
+POST `/chat` with JSON body:
 
 ```
 {
@@ -98,9 +99,10 @@ Example Response:
 
 ## Deployment
 
-* Deployed on Render for online access.
+* Live version on Render: [https://fin-chatbot.onrender.com](https://fin-chatbot.onrender.com)
+* Send POST requests directly to: `https://fin-chatbot.onrender.com/chat`
 * Automatic deployment via GitHub integration.
-* Uses environment variables for sensitive API keys.
+* Environment variables used for sensitive API keys.
 
 ## Future Enhancements
 
@@ -109,3 +111,7 @@ Example Response:
 * Frontend interface for user-friendly chat.
 * Enhanced AI response tuning with context awareness.
 * Database integration for conversation history.
+
+## License
+
+MIT License
